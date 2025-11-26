@@ -307,4 +307,4 @@ MIT License
 
 ## Repository
 
-https://github.com/aaryouz/LeaderBank-Risk-Analysis
+https://github.com/aaryouz/Bank-Risk-Analysis

@@ -37,6 +37,11 @@ export interface BankingRecord {
   'Total Deposit': number;
   'Total Fees': number;
   'Joined Bank': string;
+  'Superannuation Savings': number;
+  'Properties Owned': number;
+  Occupation: string;
+  'Location ID': number;
+  'Banking Contact': string;
 }
 
 export async function loadCSV<T>(filename: string): Promise<T[]> {
@@ -106,6 +111,8 @@ export interface FilterState {
   relationship: string;
   advisor: string;
   timePeriod: string;
+  revenueFilter?: 'All' | 'High' | 'Low';
+  riskFilter?: 'All' | 'High' | 'Low';
 }
 
 export function filterData(data: BankingRecord[], filters: FilterState): BankingRecord[] {
@@ -161,4 +168,42 @@ export function calculateKPIs(data: BankingRecord[]) {
     'Total Fees': { value: totalFees, formatted: formatCurrency(totalFees) },
     'Average Risk Score': { value: avgRisk, formatted: `${avgRisk.toFixed(1)}/100` },
   };
+}
+
+// Helper function to calculate percentiles
+export function calculatePercentile(data: number[], percentile: number): number {
+  const sorted = [...data].sort((a, b) => a - b);
+  const index = Math.ceil((percentile / 100) * sorted.length) - 1;
+  return sorted[Math.max(0, index)];
+}
+
+// Filter customers by revenue (High/Low/All)
+export function filterByRevenue(
+  data: BankingRecord[],
+  filter: 'All' | 'High' | 'Low'
+): BankingRecord[] {
+  if (filter === 'All') return data;
+  const fees = data.map(d => d['Total Fees'] || 0);
+  const p75 = calculatePercentile(fees, 75);
+  const p25 = calculatePercentile(fees, 25);
+
+  if (filter === 'High') {
+    return data.filter(d => (d['Total Fees'] || 0) > p75);
+  } else {
+    return data.filter(d => (d['Total Fees'] || 0) < p25);
+  }
+}
+
+// Filter customers by risk (High/Low/All)
+export function filterByRisk(
+  data: BankingRecord[],
+  filter: 'All' | 'High' | 'Low'
+): BankingRecord[] {
+  if (filter === 'All') return data;
+
+  if (filter === 'High') {
+    return data.filter(d => (d['Risk Weighting'] || 0) > 60);
+  } else {
+    return data.filter(d => (d['Risk Weighting'] || 0) < 30);
+  }
 }

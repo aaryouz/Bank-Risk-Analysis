@@ -8,6 +8,7 @@ const Navigation: React.FC = () => {
     { path: '/', label: 'HOME' },
     { path: '/loan-analysis', label: 'LOAN ANALYSIS' },
     { path: '/deposit-analysis', label: 'DEPOSIT ANALYSIS' },
+    { path: '/customer-360', label: 'CUSTOMER 360' },
     { path: '/summary', label: 'SUMMARY' },
   ];
 

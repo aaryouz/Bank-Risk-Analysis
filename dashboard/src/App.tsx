@@ -3,6 +3,7 @@ import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import LoanAnalysis from './pages/LoanAnalysis';
 import DepositAnalysis from './pages/DepositAnalysis';
+import Customer360 from './pages/Customer360';
 import Summary from './pages/Summary';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/loan-analysis" element={<LoanAnalysis />} />
             <Route path="/deposit-analysis" element={<DepositAnalysis />} />
+            <Route path="/customer-360" element={<Customer360 />} />
             <Route path="/summary" element={<Summary />} />
           </Routes>
         </main>
